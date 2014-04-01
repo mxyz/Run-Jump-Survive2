@@ -6,11 +6,12 @@ var Jumper = cc.Sprite.extend({
         this.x = x;
         this.y = y;
 
-        this.maxVx = 8;
+        this.maxVx = 4;
         this.accX = 0.25;
         this.backAccX = 0.5;
         this.jumpV = 11;
         this.g = -1;
+		this.isAction = false;
         
         this.vx = 0;
         this.vy = 0;
@@ -19,9 +20,12 @@ var Jumper = cc.Sprite.extend({
         this.moveRight = false;
         this.jump = false;
 		this.down = false;
-
+		this.action = this.walking();
+		this.acstand = this.standing();
+	//this.stopAllAction();
+		this.acstanding = true;
         this.ground = null;
-
+		this.runAction(this.acstand);
         this.blocks = [];
 
         this.updatePosition();
@@ -36,8 +40,11 @@ var Jumper = cc.Sprite.extend({
         var oldRect = this.getBoundingBoxToWorld();
         var oldX = this.x;
         var oldY = this.y;
-        
-        this.updateYMovement();
+		if(!this.acstanding){
+			this.runAction(this.acstand);
+			this.acstanding = true;
+        }
+		this.updateYMovement();
         this.updateXMovement();
 
         var dX = this.x - oldX;
@@ -49,6 +56,7 @@ var Jumper = cc.Sprite.extend({
                                oldRect.height + 1 );
 
         this.handleCollision( oldRect, newRect );
+		
         this.updatePosition();
     },
 
@@ -56,14 +64,39 @@ var Jumper = cc.Sprite.extend({
         if ( this.ground ) {
             if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
                 this.autoDeaccelerateX();
+				this.runAction(this.acstand);
             } else if ( this.moveRight ) {
                 this.accelerateX( 1 );
+				if(this.isAction==false){
+				this.stopAllActions();
+				this.runAction(this.action);
+				this.isAction=true;
+				}
 				this.setFlippedX(false);
+				
             } else {
                 this.accelerateX( -1 );
+				if(this.isAction==false){
+				this.stopAllActions();
+				this.runAction(this.action);
+				this.isAction=true;
+				}
 				this.setFlippedX(true);
+				
             }
+
         }
+		if ( ( !this.moveLeft ) && ( !this.moveRight ) ){
+			if(this.isAction){
+			this.stopAllActions();
+			this.isAction=false;
+			}
+			if(!this.acstanding){
+			this.runAction(this.acstand);
+			this.acstanding = true;
+			}
+		}
+		
         this.x += this.vx;
         if ( this.x < 0 ) {
             this.x += screenWidth;
@@ -160,10 +193,7 @@ var Jumper = cc.Sprite.extend({
     handleKeyDown: function( e ) {
         if ( Jumper.KEYMAP[ e ] != undefined ) {
             this[ Jumper.KEYMAP[ e ] ] = true;
-			if(Jumper.KEYMAP.left == true){
-			console.log("kuy");
-				this.setFlipped(true);
-			}
+
         }
     },
 
@@ -175,7 +205,41 @@ var Jumper = cc.Sprite.extend({
 
     setBlocks: function( blocks ) {
         this.blocks = blocks;
-    }
+    },
+	standing : function(){
+	cc.SpriteFrameCache.getInstance().addSpriteFrames(Jumper_standplist,Jumper_stand);
+
+	
+	var animFrames = [];
+	for (var i = 1; i <=7 ; i++) {
+		var str = "Jumper-stand" + i + ".png";
+		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
+		animFrames.push(frame);
+	}
+	
+	var animation = cc.Animation.create(animFrames, 1);
+
+	
+	return cc.RepeatForever.create(cc.Animate.create(animation));
+	},
+	
+	walking : function(){
+	 
+	cc.SpriteFrameCache.getInstance().addSpriteFrames(Jumper_walkplist,Jumper_walk);
+
+	
+	var animFrames = [];
+	for (var i = 1; i <= 8; i++) {
+		var str = "Jumper-walk" + i + ".png";
+		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
+		animFrames.push(frame);
+	}
+	
+	var animation = cc.Animation.create(animFrames, 0.1);
+
+	
+	return cc.RepeatForever.create(cc.Animate.create(animation));
+	},
 });
 
 Jumper.KEYMAP = {}
