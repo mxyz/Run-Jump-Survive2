@@ -1,8 +1,9 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
-        this.setPosition( new cc.Point( 0, 0 ) );
-
+		this.bg = new bg();
+		
+		this.addChild(this.bg); 
         this.createBlocks();
 		
 		this.jumper = new Jumper( 300, 50 );
@@ -25,22 +26,22 @@ var GameLayer = cc.LayerColor.extend({
 		var topestBlock = new Block( 200, 460, 400, 470 );
         this.blocks.push( topestBlock );
 		
-		var mid1Block = new Block( 0, 100, 600, 110 );
+		var mid1Block = new Block( -100, 100, 700, 110 );
         this.blocks.push( mid1Block );
 		
-		var mid2Block = new Block(0 , 340 , 600 , 350);
+		var mid2Block = new Block(-100 , 340 , 700 , 350);
 		this.blocks.push(mid2Block);
 		
-		var mid3Block = new Block(0,280,600,290);
+		var mid3Block = new Block(-100,280,700,290);
 		this.blocks.push(mid3Block);
 		
-		var mid4Block = new Block(0 , 160 , 600 , 170);
+		var mid4Block = new Block(-100 , 160 , 700 , 170);
 		this.blocks.push(mid4Block);
 		
-		var mid5Block = new Block(0,400,600,410);
+		var mid5Block = new Block(-100,400,700,410);
 		this.blocks.push(mid5Block);
 		
-		var mid6Block = new Block (0, 220 , 600 , 230);
+		var mid6Block = new Block (-100, 220 , 700 , 230);
 		this.blocks.push(mid6Block);
 
 

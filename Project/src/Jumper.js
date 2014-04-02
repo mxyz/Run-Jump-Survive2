@@ -21,11 +21,16 @@ var Jumper = cc.Sprite.extend({
         this.jump = false;
 		this.down = false;
 		this.action = this.walking();
+		this.Actioning = false;
 		this.acstand = this.standing();
 	//this.stopAllAction();
-		this.acstanding = true;
+		this.acstanding = false;
         this.ground = null;
-		this.runAction(this.acstand);
+
+		
+		this.actionjump = this.jumping();
+		this.isJump = false;
+		
         this.blocks = [];
 
         this.updatePosition();
@@ -41,9 +46,11 @@ var Jumper = cc.Sprite.extend({
         var oldX = this.x;
         var oldY = this.y;
 		if(!this.acstanding){
+			
 			this.runAction(this.acstand);
 			this.acstanding = true;
         }
+		
 		this.updateYMovement();
         this.updateXMovement();
 
@@ -58,28 +65,65 @@ var Jumper = cc.Sprite.extend({
         this.handleCollision( oldRect, newRect );
 		
         this.updatePosition();
+		
+		
+		if(this.vy>0) {
+			this.stopAllActions();
+			this.runAction(this.actionjump);
+		}if(this.vy<0){
+			this.stopAllActions();
+		}
+		else if(this.vx!=0) {
+			
+			if(this.isAction==true) {
+					if(this.isActioning==false){
+					this.isActioning= false;
+					}
+					if(!this.isActioning){
+					this.runAction(this.action);
+					this.isAction = true;
+					this.isActioning = true;
+					}
+				}
+			else {this.stopAllActions();
+			this.isActioning = false;
+			}
+		}
+		else
+			
+			this.runAction(this.acstand);
     },
 
     updateXMovement: function() {
         if ( this.ground ) {
+
             if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
                 this.autoDeaccelerateX();
-				this.runAction(this.acstand);
+				if(this.isAction && !this.isJump){
+					this.stopAllActions();
+					this.isAction=false;
+				}
+			
+				
+					this.runAction(this.acstand);
+					this.acstanding = true;
+				
+				
             } else if ( this.moveRight ) {
                 this.accelerateX( 1 );
 				if(this.isAction==false){
-				this.stopAllActions();
-				this.runAction(this.action);
 				this.isAction=true;
+				this.acstanding = false;
 				}
 				this.setFlippedX(false);
 				
             } else {
                 this.accelerateX( -1 );
 				if(this.isAction==false){
-				this.stopAllActions();
-				this.runAction(this.action);
+				
+				
 				this.isAction=true;
+				this.acstanding = false;
 				}
 				this.setFlippedX(true);
 				
@@ -88,11 +132,12 @@ var Jumper = cc.Sprite.extend({
         }
 		if ( ( !this.moveLeft ) && ( !this.moveRight ) ){
 			if(this.isAction){
-			this.stopAllActions();
+			
 			this.isAction=false;
 			}
+			
 			if(!this.acstanding){
-			this.runAction(this.acstand);
+			
 			this.acstanding = true;
 			}
 		}
@@ -107,23 +152,35 @@ var Jumper = cc.Sprite.extend({
     },
 
     updateYMovement: function() {
-        if ( this.ground ) {
+        
+		if ( this.ground ) {
+
             this.vy = 0;
             if ( this.jump ) {
+				this.stopAllActions();
+				this.runAction(this.actionjump);
+				this.isJump = true;
                 this.vy = this.jumpV;
                 this.y = this.ground.getTopY() + this.vy;
                 this.ground = null;
+				this.isAction=false;
+				
             }
 			else if(this.down){
+			
 			if(this.ground!=this.blocks[0]) {
 				this.y = this.ground.getTopY()+this.g;
 				this.ground = new Block( 0,0,0,0 );
 				}
 			}
+	
         } else {
+			this.stopAllActions();
             this.vy += this.g;
             this.y += this.vy;
         }
+		
+		
     },
 
     isSameDirection: function( dir ) {
@@ -217,7 +274,7 @@ var Jumper = cc.Sprite.extend({
 		animFrames.push(frame);
 	}
 	
-	var animation = cc.Animation.create(animFrames, 1);
+	var animation = cc.Animation.create(animFrames, 3);
 
 	
 	return cc.RepeatForever.create(cc.Animate.create(animation));
@@ -239,6 +296,21 @@ var Jumper = cc.Sprite.extend({
 
 	
 	return cc.RepeatForever.create(cc.Animate.create(animation));
+	},
+	
+	jumping : function(){
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(Jumper_jumpplist,Jumper_jump);
+		var animFrames = [];
+		for (var i = 1; i <= 2; i++) {
+			var str = "Jumper-jump" + i + ".png";
+			var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
+			animFrames.push(frame);
+		}
+	
+		var animation = cc.Animation.create(animFrames, 1);
+
+	
+		return cc.RepeatForever.create(cc.Animate.create(animation));
 	},
 });
 
