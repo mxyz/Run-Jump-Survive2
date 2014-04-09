@@ -68,25 +68,27 @@ var Jumper = cc.Sprite.extend({
 		
 		
 		if(this.vy>0) {
-			this.stopAllActions();
+			if(this.isAction == true){
+				this.stopAllActions();
+				
+			}
 			this.runAction(this.actionjump);
 		}if(this.vy<0){
 			this.stopAllActions();
 		}
-		else if(this.vx!=0) {
+		if(this.vx!=0) {
 			
 			if(this.isAction==true) {
-					if(this.isActioning==false){
-					this.isActioning= false;
-					}
-					if(!this.isActioning){
-					this.runAction(this.action);
-					this.isAction = true;
+
+				if(!this.isActioning){
+					
+					
 					this.isActioning = true;
-					}
 				}
-			else {this.stopAllActions();
-			this.isActioning = false;
+			}
+			else {
+				this.stopAllActions();
+				this.isActioning = false;
 			}
 		}
 		else
@@ -99,31 +101,30 @@ var Jumper = cc.Sprite.extend({
 
             if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
                 this.autoDeaccelerateX();
-				if(this.isAction && !this.isJump){
+				if(this.isAction && this.isJump){
 					this.stopAllActions();
 					this.isAction=false;
-				}
-			
-				
 					this.runAction(this.acstand);
 					this.acstanding = true;
-				
+				}
 				
             } else if ( this.moveRight ) {
                 this.accelerateX( 1 );
 				if(this.isAction==false){
-				this.isAction=true;
-				this.acstanding = false;
+					this.stopAllActions();
+					this.runAction(this.action);
+					this.isAction=true;
+					this.acstanding = false;
 				}
 				this.setFlippedX(false);
 				
             } else {
                 this.accelerateX( -1 );
 				if(this.isAction==false){
-				
-				
-				this.isAction=true;
-				this.acstanding = false;
+					this.stopAllActions();
+					this.runAction(this.action);
+					this.isAction=true;
+					this.acstanding = false;
 				}
 				this.setFlippedX(true);
 				
@@ -159,7 +160,6 @@ var Jumper = cc.Sprite.extend({
             if ( this.jump ) {
 				this.stopAllActions();
 				this.runAction(this.actionjump);
-				this.isJump = true;
                 this.vy = this.jumpV;
                 this.y = this.ground.getTopY() + this.vy;
                 this.ground = null;
