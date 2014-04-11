@@ -11,7 +11,7 @@ var Jumper = cc.Sprite.extend({
         this.backAccX = 0.5;
         this.jumpV = 11;
         this.g = -1;
-		this.isAction = false;
+		this.isWalk = false;
         
         this.vx = 0;
         this.vy = 0;
@@ -20,15 +20,15 @@ var Jumper = cc.Sprite.extend({
         this.moveRight = false;
         this.jump = false;
 		this.down = false;
-		this.action = this.walking();
-		this.Actioning = false;
+		this.Walk = this.walking();
+		this.Walking = false;
 		this.acstand = this.standing();
 	//this.stopAllAction();
 		this.acstanding = false;
         this.ground = null;
 
 		
-		this.actionjump = this.jumping();
+		this.Jump = this.jumping();
 		this.isJump = false;
 		
         this.blocks = [];
@@ -68,27 +68,27 @@ var Jumper = cc.Sprite.extend({
 		
 		
 		if(this.vy>0) {
-			if(this.isAction == true){
+			if(this.isWalk == true){
 				this.stopAllActions();
 				
 			}
-			this.runAction(this.actionjump);
+			this.runAction(this.Jump);
 		}if(this.vy<0){
 			this.stopAllActions();
 		}
 		if(this.vx!=0) {
 			
-			if(this.isAction==true) {
+			if(this.isWalk==true) {
 
-				if(!this.isActioning){
+				if(!this.isWalking){
 					
 					
-					this.isActioning = true;
+					this.isWalking = true;
 				}
 			}
 			else {
 				this.stopAllActions();
-				this.isActioning = false;
+				this.isWalking = false;
 			}
 		}
 		else
@@ -101,29 +101,29 @@ var Jumper = cc.Sprite.extend({
 
             if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
                 this.autoDeaccelerateX();
-				if(this.isAction && this.isJump){
+				if(this.isWalk && this.isJump){
 					this.stopAllActions();
-					this.isAction=false;
+					this.isWalk=false;
 					this.runAction(this.acstand);
 					this.acstanding = true;
 				}
 				
             } else if ( this.moveRight ) {
                 this.accelerateX( 1 );
-				if(this.isAction==false){
+				if(this.isWalk==false){
 					this.stopAllActions();
-					this.runAction(this.action);
-					this.isAction=true;
+					this.runAction(this.Walk);
+					this.isWalk = true;
 					this.acstanding = false;
 				}
 				this.setFlippedX(false);
 				
             } else {
                 this.accelerateX( -1 );
-				if(this.isAction==false){
+				if(this.isWalk==false){
 					this.stopAllActions();
-					this.runAction(this.action);
-					this.isAction=true;
+					this.runAction(this.Walk);
+					this.isWalk=true;
 					this.acstanding = false;
 				}
 				this.setFlippedX(true);
@@ -132,9 +132,9 @@ var Jumper = cc.Sprite.extend({
 
         }
 		if ( ( !this.moveLeft ) && ( !this.moveRight ) ){
-			if(this.isAction){
+			if(this.isWalk){
 			
-			this.isAction=false;
+			this.isWalk=false;
 			}
 			
 			if(!this.acstanding){
@@ -144,11 +144,11 @@ var Jumper = cc.Sprite.extend({
 		}
 		
         this.x += this.vx;
-        if ( this.x < 0 ) {
-            this.x += screenWidth;
+        if ( this.x < 20 ) {
+            this.x += screenWidth+40;
         }
-        if ( this.x > screenWidth ) {
-            this.x -= screenWidth;
+        if ( this.x > screenWidth+20 ) {
+            this.x -= screenWidth+40;
         }
     },
 
@@ -159,11 +159,11 @@ var Jumper = cc.Sprite.extend({
             this.vy = 0;
             if ( this.jump ) {
 				this.stopAllActions();
-				this.runAction(this.actionjump);
+				this.runAction(this.Jump);
                 this.vy = this.jumpV;
                 this.y = this.ground.getTopY() + this.vy;
                 this.ground = null;
-				this.isAction=false;
+				this.isWalk=false;
 				
             }
 			else if(this.down){
@@ -313,6 +313,10 @@ var Jumper = cc.Sprite.extend({
 		return cc.RepeatForever.create(cc.Animate.create(animation));
 	},
 });
+Jumper.DIRECTION = {
+	RIGHT: 1,
+	LEFT: -1
+};
 
 Jumper.KEYMAP = {}
 Jumper.KEYMAP[cc.KEY.left] = 'moveLeft';
