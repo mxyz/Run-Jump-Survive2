@@ -5,15 +5,19 @@ var GameLayer = cc.LayerColor.extend({
 		
 		this.addChild(this.bg); 
         this.createBlocks();
+
+       this.lava = new lava();
+       
 		
 		this.jumper = new Jumper( 300, 50 );
         this.jumper.setBlocks( this.blocks );
-        this.addChild( this.jumper,999 );
+        this.addChild( this.jumper,500 );
         this.scheduleOnce(function() {
             this.jumper.scheduleUpdate();
         }, 2);
         
-        
+         this.addChild(this.lava,501);
+         this.lava.scheduleUpdate();
         this.setKeyboardEnabled( true );
         return true;
     },
@@ -52,10 +56,12 @@ var GameLayer = cc.LayerColor.extend({
 
     onKeyDown: function( e ) {
         this.jumper.handleKeyDown( e );
+        this.lava.handleKeyDown( e );
     },
 
     onKeyUp: function( e ) {
         this.jumper.handleKeyUp( e );
+        this.lava.handleKeyUp( e );
     }
 });
 
