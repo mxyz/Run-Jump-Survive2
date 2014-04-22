@@ -32,7 +32,7 @@ var Jumper = cc.Sprite.extend({
 		this.Jump = this.jumping();
 		this.isJump = false;
 		
-        this.blocks = [];
+       
 
         this.updatePosition();
     },

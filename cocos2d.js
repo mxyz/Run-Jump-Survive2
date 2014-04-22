@@ -17,7 +17,8 @@
 			'src/Jumper.js',
 			'src/resource.js',
 			'src/bg.js',
-            'src/lava.js',//add your own files in order here
+            'src/lava.js',
+            'src/Bot.js',//add your own files in order here
         ]
     };
 

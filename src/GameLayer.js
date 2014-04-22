@@ -20,6 +20,12 @@ var GameLayer = cc.Layer.extend({
         this.scheduleOnce(function() {
             this.lava.scheduleUpdate();
         }, 10);
+        this.Bot = new Bot (120);
+        this.Bot.setBlocks( this.blocks);
+        this.addChild( this.Bot , 499);
+        this.scheduleOnce(function() {
+            this.Bot.scheduleUpdate();
+        }, 1);
         this.setKeyboardEnabled( true );
         
 

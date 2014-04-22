@@ -4,6 +4,7 @@ var Jumper_stand = 'images/stand.png';
 var Jumper_standplist = 'images/stand.plist';
 var Jumper_jump = 'images/jump.png';
 var Jumper_jumpplist = 'images/jump.plist';
+
 var g_resources = [
     //image
     {src:Jumper_walk},
