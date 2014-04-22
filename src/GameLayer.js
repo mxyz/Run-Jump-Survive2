@@ -1,12 +1,12 @@
-var GameLayer = cc.LayerColor.extend({
+var GameLayer = cc.Layer.extend({
     init: function() {
-        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
-		this.bg = new bg();
+        this._super( );
+		//this.bg = new bg();
 		
-		this.addChild(this.bg); 
+		//this.addChild(this.bg); 
         this.createBlocks();
 
-       this.lava = new lava();
+        this.lava = new lava();
        
 		
 		this.jumper = new Jumper( 300, 50 );
@@ -14,23 +14,33 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.jumper,500 );
         this.scheduleOnce(function() {
             this.jumper.scheduleUpdate();
-        }, 2);
+        }, 1);
         
          this.addChild(this.lava,501);
          this.lava.scheduleUpdate();
         this.setKeyboardEnabled( true );
+        
+
+        var abcdefg = cc.Follow.create(this.jumper,cc.rect(0,0,600,15000));  
+       this.runAction(abcdefg);
+
         return true;
     },
-	
-    createBlocks: function() {
+
+ createBlocks: function() {
         this.blocks = [];
-        var groundBlock = new Block( 100, 0, 500, 50 );
-        this.blocks.push( groundBlock );
-		
-		var topestBlock = new Block( 200, 460, 400, 470 );
-        this.blocks.push( topestBlock );
-		
-		var mid1Block = new Block( -100, 100, 700, 110 );
+
+        var x1 = 0,x2 = 600, y1 =100, y2 = 110;
+
+       //var groundBlock = new Block( 100, 0, 500, 50 );
+        this.blocks.push( new Block( 100, 0, 500, 50 ) );
+
+		while(y2<1000){
+            this.blocks.push( new Block( x1, y1, x2, y2));
+            y1+=60;
+            y2+=60;
+        }
+		/*var mid1Block = new Block( -100, 100, 700, 110 );
         this.blocks.push( mid1Block );
 		
 		var mid2Block = new Block(-100 , 340 , 700 , 350);
@@ -47,7 +57,7 @@ var GameLayer = cc.LayerColor.extend({
 		
 		var mid6Block = new Block (-100, 220 , 700 , 230);
 		this.blocks.push(mid6Block);
-
+        */
 
         this.blocks.forEach( function( b ) {
             this.addChild( b );

@@ -13,11 +13,11 @@ var lava = cc.Sprite.extend({
 	update : function(){
 		if(this.space){
 			if(this.y>-50){
-				this.y-=1;
+				this.y-=5;
 			}
 		}else{
 			if(this.y<500){
-				this.y += 0.03;
+				this.y += 1;
 			}	
 		}
 		this.updatePosition();
