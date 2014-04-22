@@ -7,11 +7,11 @@ var Block = cc.Sprite.extend({
     },
 
     getTopY: function() {
-        return cc.rectGetMaxY( this.getBoundingBoxToWorld() );
+        return cc.rectGetMaxY( this.getBoundingBox() );
     },
 
     hitTop: function( oldRect, newRect ) {
-        var brect = this.getBoundingBoxToWorld();
+        var brect = this.getBoundingBox();
         if ( cc.rectGetMinY( oldRect ) >= cc.rectGetMaxY( brect ) ) {
             var uRect = cc.rectUnion( oldRect, newRect );
             return cc.rectIntersectsRect( uRect, brect );
@@ -20,7 +20,7 @@ var Block = cc.Sprite.extend({
     },
 
     onTop: function( rect ) {
-        var brect = this.getBoundingBoxToWorld();
+        var brect = this.getBoundingBox();
         var bminx = cc.rectGetMinX( brect );
         var bmaxx = cc.rectGetMaxX( brect );
         var minx = cc.rectGetMinX( rect );

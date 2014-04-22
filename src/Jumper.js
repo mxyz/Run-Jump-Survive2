@@ -16,6 +16,7 @@ var Jumper = cc.Sprite.extend({
         this.vx = 0;
         this.vy = 0;
 
+        this.countJump = 0;
         this.moveLeft = false;
         this.moveRight = false;
         this.jump = false;
@@ -42,7 +43,7 @@ var Jumper = cc.Sprite.extend({
     },
 
     update: function() {
-        var oldRect = this.getBoundingBoxToWorld();
+        var oldRect = this.getBoundingBox();
         var oldX = this.x;
         var oldY = this.y;
 		if(!this.acstanding){
@@ -164,13 +165,17 @@ var Jumper = cc.Sprite.extend({
                 this.y = this.ground.getTopY() + this.vy;
                 this.ground = null;
 				this.isWalk=false;
+				this.countJump++;
 				
             }
 			else if(this.down){
 			
-			if(this.ground!=this.blocks[0]) {
-				this.y = this.ground.getTopY()+this.g;
-				this.ground = new Block( 0,0,0,0 );
+			if(this.ground==this.blocks[0]) {
+				
+				}else{
+					this.y = this.ground.getTopY()+this.g;
+					this.ground = new Block( 0,0,0,0 );
+					this.countJump--;
 				}
 			}
 	
@@ -311,6 +316,10 @@ var Jumper = cc.Sprite.extend({
 
 	
 		return cc.RepeatForever.create(cc.Animate.create(animation));
+	},
+
+	getCountJump : function(){
+		return this.countJump;
 	},
 });
 Jumper.DIRECTION = {

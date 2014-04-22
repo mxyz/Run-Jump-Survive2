@@ -17,7 +17,9 @@ var GameLayer = cc.Layer.extend({
         }, 1);
         
          this.addChild(this.lava,501);
-         this.lava.scheduleUpdate();
+        this.scheduleOnce(function() {
+            this.lava.scheduleUpdate();
+        }, 10);
         this.setKeyboardEnabled( true );
         
 
@@ -35,7 +37,7 @@ var GameLayer = cc.Layer.extend({
        //var groundBlock = new Block( 100, 0, 500, 50 );
         this.blocks.push( new Block( 100, 0, 500, 50 ) );
 
-		while(y2<1000){
+		while(y2<6111){
             this.blocks.push( new Block( x1, y1, x2, y2));
             y1+=60;
             y2+=60;
