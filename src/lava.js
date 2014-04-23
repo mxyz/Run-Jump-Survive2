@@ -2,7 +2,7 @@ var lava = cc.Sprite.extend({
     ctor: function() {
         this._super();
         this.initWithFile( 'images/lava.png' );
-        this.y = -50;
+        this.y = -350;
 		this.setPosition( new cc.p(300,this.y) );
 		this.space = false;
 	
