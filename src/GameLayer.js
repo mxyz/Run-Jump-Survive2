@@ -20,12 +20,7 @@ var GameLayer = cc.Layer.extend({
         this.scheduleOnce(function() {
             this.lava.scheduleUpdate();
         }, 10);
-        this.Bot = new Bot (110);
-        this.Bot.setBlocks( this.blocks);
-        this.addChild( this.Bot , 499);
-        this.scheduleOnce(function() {
-            this.Bot.scheduleUpdate();
-        }, 1);
+        this.createBots();
         this.setKeyboardEnabled( true );
         
 
@@ -36,11 +31,21 @@ var GameLayer = cc.Layer.extend({
     },
     createBots: function() {
         this.Bots = [];
-        var y = 110;
-
-
+        var speed=1;
+for( var i=0;i<100;i++) {
+    if(i%25==0)
+        speed=1;
+    for( var j=0;j<=Math.floor(i/25);j++) {
+        var newBot = new Bot( i,speed );
+        this.Bots.push(newBot);
+        speed+=0.05;
+    }
+}
         this.Bots.forEach( function( b ) {
-            this.addChild( b );
+            this.scheduleOnce(function() {
+            b.scheduleUpdate();
+        }, 1);
+            this.addChild( b ,499);
         }, this );
     },
 

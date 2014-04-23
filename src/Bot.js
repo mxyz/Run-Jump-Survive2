@@ -1,10 +1,10 @@
 var Bot = cc.Sprite.extend({
-	ctor : function( y ){
+	ctor : function( level , speed  ){
 	this._super();
 	this.initWithFile('images/bot11.png');
 	this.setAnchorPoint( cc.p( 0.5, 0 ) );
-	this.speed = 1;
-	this.level = 0;
+	this.speed = speed;
+	this.level = level;
 	this.speedUpPerlevel = 0.1;
 	this.moveleft = false;
 	this.moveright = false;
@@ -17,7 +17,7 @@ var Bot = cc.Sprite.extend({
 		this.moveright= true;
 	}
 	this.x = Math.random()*600;
-	this.y = y;
+	this.y = 110+(this.level*60);
 	this.updatePosition();
 	},
 	updatePosition: function(){
@@ -38,7 +38,6 @@ var Bot = cc.Sprite.extend({
                                oldRect.width,
                                oldRect.height + 1 );
 
-        this.handleCollision( oldRect, newRect );
         this.updatePosition();
 	},
 	updateXMovement: function(){
@@ -49,11 +48,11 @@ var Bot = cc.Sprite.extend({
 			this.changeDirection();
 		}
 			if(this.moveleft == true){
-				this.x-=this.speed + (this.level*this.speedUpPerlevel);
+				this.x-=this.speed;
 				this.setFlippedX(true);
 			}
 			if(this.moveright == true){
-				this.x+=this.speed + (this.level*this.speedUpPerlevel);
+				this.x+=this.speed;
 				this.setFlippedX(false);
 			}
 
@@ -79,39 +78,6 @@ var Bot = cc.Sprite.extend({
 		}
 	},
 	 
-	setBlocks: function( blocks ) {
-        this.blocks = blocks;
-    },
-     handleCollision: function( oldRect, newRect ) {
-        if ( this.ground ) {
-            if ( !this.ground.onTop( newRect ) ) {
-                this.ground = null;
-            }
-        } else {
-            if ( this.vy <= 0 ) {
-                var topBlock = this.findTopBlock( this.blocks, oldRect, newRect );
-                
-                if ( topBlock ) {
-                    this.ground = topBlock;
-                    this.y = topBlock.getTopY();
-                    this.vy = 0;
-                }
-            }
-        }
-    },
-    findTopBlock: function( blocks, oldRect, newRect ) {
-        var topBlock = null;
-        var topBlockY = -1;
-        
-        blocks.forEach( function( b ) {
-            if ( b.hitTop( oldRect, newRect ) ) {
-                if ( b.getTopY() > topBlockY ) {
-                    topBlockY = b.getTopY();
-                    topBlock = b;
-                }
-            }
-        }, this );
-        
-        return topBlock;
-    },
+	
+    
 });
