@@ -19,6 +19,7 @@ var Bot = cc.Sprite.extend({
 	this.x = Math.random()*600;
 	this.y = 110+(this.level*60);
 	this.updatePosition();
+	this.runAction(this.move());
 	},
 	updatePosition: function(){
 		this.setPosition( cc.p( Math.round( this.x ),
@@ -76,6 +77,23 @@ var Bot = cc.Sprite.extend({
 			this.moveright=true;
 			this.moveleft=false;
 		}
+	},
+	move : function(){
+	 
+	cc.SpriteFrameCache.getInstance().addSpriteFrames(Bot_walkplist,Bot_walk);
+
+	
+	var animFrames = [];
+	for (var i = 1; i <= 6; i++) {
+		var str = "bot" + i + ".png";
+		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
+		animFrames.push(frame);
+	}
+	
+	var animation = cc.Animation.create(animFrames, 0.1);
+
+	
+	return cc.RepeatForever.create(cc.Animate.create(animation));
 	},
 	 
 	

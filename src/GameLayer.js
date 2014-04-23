@@ -31,14 +31,15 @@ var GameLayer = cc.Layer.extend({
     },
     createBots: function() {
         this.Bots = [];
-        var speed=1;
+        var speed=0.5;
 for( var i=0;i<100;i++) {
-    if(i%25==0)
-        speed=1;
+    if(i%25==0) {
+        speed=0.5;
+    }
     for( var j=0;j<=Math.floor(i/25);j++) {
         var newBot = new Bot( i,speed );
         this.Bots.push(newBot);
-        speed+=0.05;
+        speed+=0.03;
     }
 }
         this.Bots.forEach( function( b ) {
