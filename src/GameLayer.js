@@ -1,9 +1,9 @@
 var GameLayer = cc.Layer.extend({
     init: function() {
         this._super( );
-		//this.bg = new bg();
+		this.bg = new bg(this);
 		
-		//this.addChild(this.bg); 
+		this.addChild(this.bg); 
         this.createBlocks();
 
         this.lava = new lava();
@@ -20,7 +20,7 @@ var GameLayer = cc.Layer.extend({
         this.scheduleOnce(function() {
             this.lava.scheduleUpdate();
         }, 10);
-        this.Bot = new Bot (120);
+        this.Bot = new Bot (110);
         this.Bot.setBlocks( this.blocks);
         this.addChild( this.Bot , 499);
         this.scheduleOnce(function() {
@@ -29,10 +29,19 @@ var GameLayer = cc.Layer.extend({
         this.setKeyboardEnabled( true );
         
 
-        var abcdefg = cc.Follow.create(this.jumper,cc.rect(0,0,600,15000));  
-       this.runAction(abcdefg);
+        var followJumper = cc.Follow.create(this.jumper,cc.rect(0,0,600,15000));  
+       this.runAction(followJumper);
 
         return true;
+    },
+    createBots: function() {
+        this.Bots = [];
+        var y = 110;
+
+
+        this.Bots.forEach( function( b ) {
+            this.addChild( b );
+        }, this );
     },
 
  createBlocks: function() {

@@ -255,7 +255,6 @@ var Jumper = cc.Sprite.extend({
     handleKeyDown: function( e ) {
         if ( Jumper.KEYMAP[ e ] != undefined ) {
             this[ Jumper.KEYMAP[ e ] ] = true;
-
         }
     },
 

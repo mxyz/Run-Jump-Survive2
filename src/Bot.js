@@ -9,8 +9,8 @@ var Bot = cc.Sprite.extend({
 	this.moveleft = false;
 	this.moveright = false;
 	this.ground = null;
-	 this.blocks = [];
-	this.rand = Math.random()*2;
+	this.blocks = [];
+	this.rand = Math.floor(Math.random()*2);
 	if(this.rand==1){
 		this.moveleft = true;
 	}else{
@@ -25,10 +25,9 @@ var Bot = cc.Sprite.extend({
                                 Math.round( this.y ) ) );
 	},
 	update: function(){
-		var oldRect = this.getBoundingBox();
+		var oldRect = this.getBoundingBoxToWorld();
         var oldX = this.x;
         var oldY = this.y;
-        this.updateYMovement();
         this.updateXMovement();
 
         var dX = this.x - oldX;
@@ -40,9 +39,15 @@ var Bot = cc.Sprite.extend({
                                oldRect.height + 1 );
 
         this.handleCollision( oldRect, newRect );
+        this.updatePosition();
 	},
 	updateXMovement: function(){
-		if(this.ground){
+
+
+        	var rand = Math.floor(Math.random()*200);
+		if(rand==1){
+			this.changeDirection();
+		}
 			if(this.moveleft == true){
 				this.x-=this.speed + (this.level*this.speedUpPerlevel);
 				this.setFlippedX(true);
@@ -52,49 +57,28 @@ var Bot = cc.Sprite.extend({
 				this.setFlippedX(false);
 			}
 
-		}
-		this.x += this.vx;
+		
+		
         if ( this.x < 20 ) {
             this.x += screenWidth+40;
         }
         if ( this.x > screenWidth+20 ) {
             this.x -= screenWidth+40;
         }
-	},
-	 updateYMovement: function() {
-        
-		if ( this.ground ) {
 
-            this.vy = 0;
-            if ( this.jump ) {
-				this.stopAllActions();
-				this.runAction(this.Jump);
-                this.vy = this.jumpV;
-                this.y = this.ground.getTopY() + this.vy;
-                this.ground = null;
-				this.isWalk=false;
-				this.countJump++;
-				
-            }
-			else if(this.down){
-			
-			if(this.ground==this.blocks[0]) {
-				
-				}else{
-					this.y = this.ground.getTopY()+this.g;
-					this.ground = new Block( 0,0,0,0 );
-					this.countJump--;
-				}
-			}
-	
-        } else {
-			this.stopAllActions();
-            this.vy += this.g;
-            this.y += this.vy;
-        }
-		
-		
-    },
+
+	},
+	changeDirection: function() {
+		if(this.moveright) {
+			this.moveright=false;
+			this.moveleft=true;
+		}
+		else {
+			this.moveright=true;
+			this.moveleft=false;
+		}
+	},
+	 
 	setBlocks: function( blocks ) {
         this.blocks = blocks;
     },
