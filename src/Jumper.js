@@ -155,6 +155,7 @@ var Jumper = cc.Sprite.extend({
 
     updateYMovement: function() {
         
+
 		if ( this.ground ) {
 
             this.vy = 0;
@@ -165,9 +166,19 @@ var Jumper = cc.Sprite.extend({
                 this.y = this.ground.getTopY() + this.vy;
                 this.ground = null;
 				this.isWalk=false;
-				this.countJump++;
 				
+				if(this.countJump<=100){
+					this.countJump++;
+					this.getParent().jump = this.jump;
+
+
+				}	
+
+				console.log(this.countJump);
+
             }
+            
+
 			else if(this.down){
 			
 			if(this.ground==this.blocks[0]) {
@@ -176,14 +187,21 @@ var Jumper = cc.Sprite.extend({
 					this.y = this.ground.getTopY()+this.g;
 					this.ground = new Block( 0,0,0,0 );
 					this.countJump--;
+					console.log(this.countJump);
 				}
 			}
 	
-        } else {
+        }
+
+        else {
+        	
 			this.stopAllActions();
             this.vy += this.g;
             this.y += this.vy;
+            this.jump = false;
+			this.getParent().jump = this.jump;
         }
+
 		
 		
     },
@@ -255,12 +273,18 @@ var Jumper = cc.Sprite.extend({
     handleKeyDown: function( e ) {
         if ( Jumper.KEYMAP[ e ] != undefined ) {
             this[ Jumper.KEYMAP[ e ] ] = true;
+            if(Jumper.KEYMAP[cc.KEY.up]== 'up'){
+            	this.getParent().jump = this.jump;
+        	}
         }
     },
 
     handleKeyUp: function( e ) {
         if ( Jumper.KEYMAP[ e ] != undefined ) {
             this[ Jumper.KEYMAP[ e ] ] = false;
+            if(Jumper.KEYMAP[cc.KEY.up]== 'up'){
+            	this.getParent().jump = this.jump;
+        	}
         }
     },
 

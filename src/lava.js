@@ -14,25 +14,30 @@ var lava = cc.Sprite.extend({
         this.setPosition( cc.p( 300, Math.round( this.y ) ) );
     },
 	update : function(){
-		if(this.space){
-			if(this.y>-50){
-				this.y-=5;
+		if(this.getParent().jump){
+            
+            if(this.level<100){
+            this.level++;
+            }
+        }
+        if(this.space){
+			if(this.y>-350 ){
+				this.y-=50;
 			}
 		}else{
-			if(this.y<6500){
+			if(this.y<5800){
 				this.y += this.normalspeed + (this.level*this.speedPerLevel);
 			}	
 		}
 		this.updatePosition();
+        
 	},
 	handleKeyDown: function( e ) {
         if ( lava.KEYMAP[ e ] != undefined ) {
         if( lava.KEYMAP[ e ] == 'space'){
             this[ lava.KEYMAP[ e ] ] = true;
         }
-        else if (lava.KEYMAP[ e ] = 'up'){
-        	this.level++;
-        }
+
         }
     },
 

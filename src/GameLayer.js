@@ -16,19 +16,30 @@ var GameLayer = cc.Layer.extend({
             this.jumper.scheduleUpdate();
         }, 1);
         
-         this.addChild(this.lava,501);
-        this.scheduleOnce(function() {
-            this.lava.scheduleUpdate();
-        }, 10);
+        this.addChild(this.lava,501);
+    
+        this.scheduleOnce(function(){
+        this.lava.scheduleUpdate();
+        }, 11);
+        
         this.createBots();
         this.setKeyboardEnabled( true );
+
+        this.floorLabel = cc.LabelTTF.create( '5', 'Arial', 30 );
+        this.floorLabel.setPosition( new cc.Point( 590, 360 ) );
+        this.addChild( this.floorLabel );
+        this.floor1Label = cc.LabelTTF.create( '10', 'Arial', 30 );
+        this.floor1Label.setPosition( new cc.Point( 580, 660 ) );
+        this.addChild( this.floor1Label );
         
 
         var followJumper = cc.Follow.create(this.jumper,cc.rect(0,0,600,15000));  
-       this.runAction(followJumper);
+        this.runAction(followJumper);
 
+        cc.AudioEngine.getInstance().playMusic( 'sound/1.mp3', true );
         return true;
     },
+
     createBots: function() {
         this.Bots = [];
         var speed=0.5;

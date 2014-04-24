@@ -25,4 +25,5 @@ var g_resources = [
     //bgm
 
     //effect
+    {src: 'sound/Dead wish.mp3'},
 ];
