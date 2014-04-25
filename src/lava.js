@@ -1,38 +1,41 @@
 var lava = cc.Sprite.extend({
-    ctor: function() {
+    ctor: function(layer) {
+        this.layer=layer;
         this._super();
         this.initWithFile( 'images/lava.png' );
         this.y = -350;
-		this.setPosition( new cc.p(300,this.y) );
-		this.space = false;
-	
-		this.level = 0;
-		this.speedPerLevel = 0.01;
-		this.normalspeed = 1;
-	},
+        this.setPosition( new cc.p(300,this.y) );
+        this.space = false;
+    
+        this.level = 0;
+        this.floor=0;
+        this.speedPerLevel = 0.01;
+        this.normalspeed = 1;
+    },
     updatePosition: function() {
         this.setPosition( cc.p( 300, Math.round( this.y ) ) );
     },
-	update : function(){
-		if(this.getParent().jump){
+    update : function(){
+        var posY=this.getPositionY();
+        if(this.getParent().jump){
             
-            if(this.level<100){
             this.level++;
-            }
         }
         if(this.space){
-			if(this.y>-350 ){
-				this.y-=50;
-			}
-		}else{
-			if(this.y<5800){
-				this.y += this.normalspeed + (this.level*this.speedPerLevel);
-			}	
-		}
-		this.updatePosition();
+            if(this.y>-350 ){
+                this.y-=50;
+            }
+        }else{
+                this.y += this.normalspeed + (this.level*this.speedPerLevel);
+        }
+        if(posY+360>110+(this.floor+1)*60) {
+            this.layer.removeBotFromLevel();
+            this.floor++;
+        }
+        this.updatePosition();
         
-	},
-	handleKeyDown: function( e ) {
+    },
+    handleKeyDown: function( e ) {
         if ( lava.KEYMAP[ e ] != undefined ) {
         if( lava.KEYMAP[ e ] == 'space'){
             this[ lava.KEYMAP[ e ] ] = true;

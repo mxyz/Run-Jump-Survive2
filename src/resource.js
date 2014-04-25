@@ -25,5 +25,7 @@ var g_resources = [
     //bgm
 
     //effect
-    {src: 'sound/Dead wish.mp3'},
+
+    {src: 'sound/2.mp3'},//Wanted Dead or Alive
+
 ];

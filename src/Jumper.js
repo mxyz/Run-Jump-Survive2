@@ -1,5 +1,6 @@
 var Jumper = cc.Sprite.extend({
-    ctor: function( x, y ) {
+    ctor: function( x, y ,layer) {
+    	this.layer=layer;
         this._super();
         this.initWithFile( 'images/jumper.png' );
         this.setAnchorPoint( cc.p( 0.5, 0 ) );
@@ -167,14 +168,14 @@ var Jumper = cc.Sprite.extend({
                 this.ground = null;
 				this.isWalk=false;
 				
-				if(this.countJump<=100){
+				//if(this.countJump<=100){
 					this.countJump++;
 					this.getParent().jump = this.jump;
 
 
-				}	
-
-				console.log(this.countJump);
+				//}	
+				if(this.layer.botCreateLevel-8 < this.countJump)
+                	this.layer.createNewBots();
 
             }
             
@@ -187,7 +188,6 @@ var Jumper = cc.Sprite.extend({
 					this.y = this.ground.getTopY()+this.g;
 					this.ground = new Block( 0,0,0,0 );
 					this.countJump--;
-					console.log(this.countJump);
 				}
 			}
 	
