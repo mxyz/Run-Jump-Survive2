@@ -95,7 +95,17 @@ var Bot = cc.Sprite.extend({
 	
 	return cc.RepeatForever.create(cc.Animate.create(animation));
 	},
-	 
-	
+	hit: function(jumper) {
+		var jumperPos=jumper.getPosition();
+		var thisPos = this.getPosition();
+		var distance = Math.sqrt(   Math.pow( jumperPos.x-thisPos.x,2 )+ Math.pow( jumperPos.y-thisPos.y,2 )  );
+		if(distance<30) {
+			jumper.handleKeyDown( cc.KEY.down );
+			this.scheduleOnce(function() {
+                jumper.handleKeyUp( cc.KEY.down );
+            }, 0.1);
+			
+		}
+	},
     
 });

@@ -25,10 +25,9 @@ var GameLayer = cc.Layer.extend({
         var followJumper = cc.Follow.create(this.jumper,cc.rect(0,0,600,100000));  
         this.runAction(followJumper);
         this.scheduleUpdate();
-        this.rand = Math.floor(Math.random()*3);
-        cc.AudioEngine.getInstance().playMusic( 'sound/2..mp3', true );
 
-         return true;
+        cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', true );
+        return true;
     },
     createFloorLabel: function(i) {
         var floor1Label = cc.LabelTTF.create( i, 'Arial', 30 );
@@ -38,8 +37,18 @@ var GameLayer = cc.Layer.extend({
     update: function() {
         var lavaPos = this.lava.getPositionY()+360;
         var jumperPos = this.jumper.getPositionY();
+        this.mainCheckHit();
         if(lavaPos > jumperPos)
             this.gameOver();
+    },
+    mainCheckHit: function() {
+        for(var i=0;i<this.Bots.length;i++) {
+            if(this.Bots[i][0].level==this.jumper.countJump-1) {
+                for(var j=0;j<this.Bots[i].length;j++) {
+                    this.Bots[i][j].hit(this.jumper);
+                }
+            }
+        }
     },
     gameOver: function() {
         console.log("Floor: "+this.jumper.countJump);
@@ -96,7 +105,7 @@ var GameLayer = cc.Layer.extend({
     },
 
     createBlocks: function() {
-        var x1 = 0,x2 = 600, y1 =100+60*this.botCreateLevel, y2 = 110+60*this.botCreateLevel;
+        var x1 = 0,x2 = 700, y1 =100+60*this.botCreateLevel, y2 = 110+60*this.botCreateLevel;
 
         this.blocks.push( new Block( x1, y1, x2, y2));
 
