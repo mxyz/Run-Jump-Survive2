@@ -3,7 +3,7 @@ var bg = cc.Sprite.extend({
     	this.layer=layer;
         this._super();
         this.initWithFile( 'images/bg.png' );
-		this.setPosition( new cc.p(300,300) );
+		this.setPosition( new cc.p(400,300) );
 		this.scheduleUpdate();
 		this.checkUp=0;
 		this.checkDown=-2;

@@ -146,10 +146,10 @@ var Jumper = cc.Sprite.extend({
 		}
 		
         this.x += this.vx;
-        if ( this.x < 20 ) {
-            this.x += screenWidth+40;
+        if ( this.x < 80 ) {
+            this.x += ( screenWidth+40 );
         }
-        if ( this.x > screenWidth+20 ) {
+        if ( this.x > screenWidth+120 ) {
             this.x -= screenWidth+40;
         }
     },

@@ -59,11 +59,12 @@ var Bot = cc.Sprite.extend({
 
 		
 		
-        if ( this.x < 20 ) {
-            this.x += screenWidth+40;
+
+        if ( this.x < 120 ) {
+            this.x += screenWidth+140;
         }
-        if ( this.x > screenWidth+20 ) {
-            this.x -= screenWidth+40;
+        if ( this.x > screenWidth+120 ) {
+            this.x -= screenWidth+140;
         }
 
 
