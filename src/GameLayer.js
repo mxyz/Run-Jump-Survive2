@@ -31,7 +31,7 @@ var GameLayer = cc.Layer.extend({
     },
     createFloorLabel: function(i) {
         var floor1Label = cc.LabelTTF.create( i, 'Arial', 30 );
-        floor1Label.setPosition( new cc.Point( 570, 60+300*i/5 ) );
+        floor1Label.setPosition( new cc.Point( 670, 60+300*i/5 ) );
         this.addChild( floor1Label,498 );
     },
     update: function() {
@@ -52,6 +52,11 @@ var GameLayer = cc.Layer.extend({
     },
     gameOver: function() {
         console.log("Floor: "+this.jumper.countJump);
+         var floor1Label = cc.LabelTTF.create( 'GAME OVER '+this.jumper.countJump, 'Arial', 70 );
+        floor1Label.setPosition( new cc.Point( 400, this.jumper.getPositionY()+100 ) );
+        this.addChild( floor1Label,999 );
+        cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', false);
+        cc.AudioEngine.getInstance().playMusic( 'sound/gameover.mp3', true);
         this.lava.unscheduleUpdate();
         this.removeChild(this.jumper);
         this.unscheduleUpdate();
@@ -114,12 +119,13 @@ var GameLayer = cc.Layer.extend({
 
     onKeyDown: function( e ) {
         this.jumper.handleKeyDown( e );
-        this.lava.handleKeyDown( e );
+
+
     },
 
     onKeyUp: function( e ) {
         this.jumper.handleKeyUp( e );
-        this.lava.handleKeyUp( e );
+
     }
 });
 
@@ -131,3 +137,4 @@ var StartScene = cc.Scene.extend({
         this.addChild( layer );
     }
 });
+GameLayer.KEYMAP[cc.KEY.space] = 'space';

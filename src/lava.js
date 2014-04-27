@@ -35,20 +35,7 @@ var lava = cc.Sprite.extend({
         this.updatePosition();
         
     },
-    handleKeyDown: function( e ) {
-        if ( lava.KEYMAP[ e ] != undefined ) {
-        if( lava.KEYMAP[ e ] == 'space'){
-            this[ lava.KEYMAP[ e ] ] = true;
-        }
 
-        }
-    },
-
-    handleKeyUp: function( e ) {
-        if ( lava.KEYMAP[ e ] != undefined ) {
-            this[ lava.KEYMAP[ e ] ] = false;
-        }
-    },
 
 
 

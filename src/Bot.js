@@ -60,13 +60,12 @@ var Bot = cc.Sprite.extend({
 		
 		
 
-        if ( this.x < 120 ) {
-            this.x += screenWidth+140;
+ 		if ( this.x < 80 ) {
+            this.x += ( screenWidth+40 );
         }
         if ( this.x > screenWidth+120 ) {
-            this.x -= screenWidth+140;
+            this.x -= screenWidth+40;
         }
-
 
 	},
 	changeDirection: function() {
