@@ -2,6 +2,8 @@ var GameLayer = cc.Layer.extend({
     init: function() {
         this._super( );
         this.bg = new bg(this);
+        this.state = GameLayer.STATES.READY;
+         this.Items = [];
         
         this.addChild(this.bg); 
         this.createInitBots();
@@ -10,24 +12,37 @@ var GameLayer = cc.Layer.extend({
         this.jumper = new Jumper( 400, 50,this );
         this.jumper.setBlocks( this.blocks );
         this.addChild( this.jumper,500 );
-        this.scheduleOnce(function() {
-            this.jumper.scheduleUpdate();
-        }, 1);
         
         this.addChild(this.lava,501);
-    
-        this.scheduleOnce(function(){
-        this.lava.scheduleUpdate();
-        }, 11);
-        
         this.setKeyboardEnabled( true );
 
         var followJumper = cc.Follow.create(this.jumper,cc.rect(100,0,600,100000));  
         this.runAction(followJumper);
         this.scheduleUpdate();
 
+                return true;
+    },
+    startGame: function() {
+
+        this.scheduleOnce(function() {
+            this.jumper.scheduleUpdate();
+        }, 1);
         cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', true );
-        return true;
+        this.scheduleOnce(function(){
+        this.lava.scheduleUpdate();
+        }, 11);
+        this.state = GameLayer.STATES.PLAYING;
+
+    },
+    restartGame: function() {
+        for( var i=0;i<this.Bots.length;i++ )
+            for( var j=0;j<this.Bots[i].length;j++ )
+                this.removeChild( this.Bots[i][j] );
+        for( var i=0;i<this.blocks.length;i++ )
+            this.removeChild( this.blocks[i] );
+        this.removeChild( this.lava );
+        this.removeChild( this.overLabel );
+        this.init();
     },
     createFloorLabel: function(i) {
         var floor1Label = cc.LabelTTF.create( i, 'Arial', 30 );
@@ -49,16 +64,18 @@ var GameLayer = cc.Layer.extend({
                 }
             }
         }
+        this.keepItem();
     },
     gameOver: function() {
         console.log("Floor: "+this.jumper.countJump);
-         var floor1Label = cc.LabelTTF.create( 'GAME OVER '+this.jumper.countJump, 'Arial', 70 );
-        floor1Label.setPosition( new cc.Point( 400, this.jumper.getPositionY()+100 ) );
-        this.addChild( floor1Label,999 );
+        this.overLabel = cc.LabelTTF.create( 'GAME OVER '+this.jumper.countJump, 'Arial', 70 );
+        this.overLabel.setPosition( new cc.Point( 400, this.jumper.getPositionY()+100 ) );
+        this.addChild( this.overLabel,999 );
         cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', false);
         cc.AudioEngine.getInstance().playMusic( 'sound/gameover.mp3', true);
         this.lava.unscheduleUpdate();
         this.removeChild(this.jumper);
+        this.state = GameLayer.STATES.GAMEOVER;
         this.unscheduleUpdate();
     },
     removeBotFromLevel: function() {
@@ -80,11 +97,22 @@ var GameLayer = cc.Layer.extend({
             this.createNewBots();
         }
     },
+    superJump: function(item){
+        this.jumper.plusJumpCount();
+        
+    },
     createNewBots: function() {
         if((this.botCreateLevel+1)%5==0)
             this.createFloorLabel(this.botCreateLevel+1);
         this.createBlocks();
         this.Bots.push([]);
+        var rand = Math.floor(Math.random()*1000/this.botCreateLevel);
+        if(rand==0) {
+            var item = new Item(this.botCreateLevel,0,this);
+            this.Items.push(item);
+            this.addChild(this.Items[this.Items.length-1],498);
+
+        }
         /*if(this.botCreateLevel%25==0)
             this.botCreateSpeed=0.5;
         for( var i=0;i<=Math.floor(this.botCreateLevel/25);i++) {
@@ -108,6 +136,15 @@ var GameLayer = cc.Layer.extend({
             }, this );
         this.botCreateLevel++;
     },
+    keepItem: function() {
+        for(var i=0;i<this.Items.length;i++) {
+            if(this.Items[i].level==this.jumper.countJump-1) {
+                this.Items[i].keep(this.jumper);
+
+
+            }
+        }
+    },
 
     createBlocks: function() {
         var x1 = 0,x2 = 800, y1 =100+60*this.botCreateLevel, y2 = 110+60*this.botCreateLevel;
@@ -118,7 +155,16 @@ var GameLayer = cc.Layer.extend({
     },
 
     onKeyDown: function( e ) {
-        this.jumper.handleKeyDown( e );
+        if( this.state == GameLayer.STATES.PLAYING )
+            this.jumper.handleKeyDown( e );
+        else if( this.state == GameLayer.STATES.READY ) {
+            if( e==32 )
+                this.startGame();
+        }
+        else if( this.state == GameLayer.STATES.GAMEOVER ) {
+            if( e==32 )
+                this.restartGame();
+        }
 
 
     },
@@ -137,4 +183,9 @@ var StartScene = cc.Scene.extend({
         this.addChild( layer );
     }
 });
-GameLayer.KEYMAP[cc.KEY.space] = 'space';
+
+GameLayer.STATES = {
+    READY: 0,
+    PLAYING: 1,
+    GAMEOVER:2
+};

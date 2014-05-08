@@ -18,7 +18,8 @@
 			'src/resource.js',
 			'src/bg.js',
             'src/lava.js',
-            'src/Bot.js',//add your own files in order here
+            'src/Bot.js',
+            'src/Item.js',//add your own files in order here
         ]
     };
 

@@ -27,5 +27,6 @@ var g_resources = [
     //effect
 
     {src: 'sound/2.mp3'},//Wanted Dead or Alive
+    {src: 'sound/gameover.mp3'},//Hard time
 
 ];

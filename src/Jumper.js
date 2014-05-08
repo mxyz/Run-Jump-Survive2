@@ -153,9 +153,18 @@ var Jumper = cc.Sprite.extend({
             this.x -= screenWidth+40;
         }
     },
-
+    teleport: function( number ) {
+    	for( var i=0;i<number;i++) {
+    		this.y+=60;
+    		this.countJump++;
+    	}
+    },
     updateYMovement: function() {
+    	if( ((50+this.countJump*60)-this.getPositionY())%60 == 0 )
+    		this.y= 50+this.countJump*60;
         
+				if(this.layer.botCreateLevel-10 < this.countJump)
+                	this.layer.createNewBots();
 
 		if ( this.ground ) {
 
@@ -174,8 +183,6 @@ var Jumper = cc.Sprite.extend({
 
 
 				//}	
-				if(this.layer.botCreateLevel-8 < this.countJump)
-                	this.layer.createNewBots();
 
             }
             
@@ -344,6 +351,10 @@ var Jumper = cc.Sprite.extend({
 	getCountJump : function(){
 		return this.countJump;
 	},
+	plusJumpCount: function(){
+
+		this.teleport(5);
+	}
 });
 Jumper.DIRECTION = {
 	RIGHT: 1,
