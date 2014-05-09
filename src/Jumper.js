@@ -154,10 +154,12 @@ var Jumper = cc.Sprite.extend({
         }
     },
     teleport: function( number ) {
+        
     	for( var i=0;i<number;i++) {
     		this.y+=60;
     		this.countJump++;
     	}
+        
     },
     updateYMovement: function() {
     	if( ((50+this.countJump*60)-this.getPositionY())%60 == 0 )

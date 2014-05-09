@@ -4,6 +4,8 @@ var GameLayer = cc.Layer.extend({
         this.bg = new bg(this);
         this.state = GameLayer.STATES.READY;
          this.Items = [];
+         cc.AudioEngine.getInstance().playMusic( 'sound/gameover.mp3',false );
+         cc.AudioEngine.getInstance().playMusic( 'sound/ready.mp3', true );
         
         this.addChild(this.bg); 
         this.createInitBots();
@@ -23,11 +25,12 @@ var GameLayer = cc.Layer.extend({
                 return true;
     },
     startGame: function() {
-
+        cc.AudioEngine.getInstance().playMusic( 'sound/ready.mp3', false );
+        this.randmusic = Math.round((Math.random()*2))+1;
         this.scheduleOnce(function() {
             this.jumper.scheduleUpdate();
         }, 1);
-        cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', true );
+        cc.AudioEngine.getInstance().playMusic( 'sound/'+this.randmusic+'.mp3', true );
         this.scheduleOnce(function(){
         this.lava.scheduleUpdate();
         }, 11);
@@ -43,6 +46,18 @@ var GameLayer = cc.Layer.extend({
         this.removeChild( this.lava );
         this.removeChild( this.overLabel );
         this.init();
+    },
+      gameOver: function() {
+        console.log("Floor: "+this.jumper.countJump);
+        this.overLabel = cc.LabelTTF.create( 'GAME OVER '+this.jumper.countJump, 'Arial', 70 );
+        this.overLabel.setPosition( new cc.Point( 400, this.jumper.getPositionY()+100 ) );
+        this.addChild( this.overLabel,999 );
+        cc.AudioEngine.getInstance().playMusic( 'sound/'+this.randmusic+'.mp3', true);
+        cc.AudioEngine.getInstance().playMusic( 'sound/gameover.mp3', true);
+        this.lava.unscheduleUpdate();
+        this.removeChild(this.jumper);
+        this.state = GameLayer.STATES.GAMEOVER;
+        this.unscheduleUpdate();
     },
     createFloorLabel: function(i) {
         var floor1Label = cc.LabelTTF.create( i, 'Arial', 30 );
@@ -66,18 +81,7 @@ var GameLayer = cc.Layer.extend({
         }
         this.keepItem();
     },
-    gameOver: function() {
-        console.log("Floor: "+this.jumper.countJump);
-        this.overLabel = cc.LabelTTF.create( 'GAME OVER '+this.jumper.countJump, 'Arial', 70 );
-        this.overLabel.setPosition( new cc.Point( 400, this.jumper.getPositionY()+100 ) );
-        this.addChild( this.overLabel,999 );
-        cc.AudioEngine.getInstance().playMusic( 'sound/2.mp3', false);
-        cc.AudioEngine.getInstance().playMusic( 'sound/gameover.mp3', true);
-        this.lava.unscheduleUpdate();
-        this.removeChild(this.jumper);
-        this.state = GameLayer.STATES.GAMEOVER;
-        this.unscheduleUpdate();
-    },
+  
     removeBotFromLevel: function() {
         this.Bots[0].forEach( function( b ) {
                 this.removeChild( b );
@@ -87,7 +91,7 @@ var GameLayer = cc.Layer.extend({
     createInitBots: function() {
         this.Bots = [];
         this.blocks = [];
-        this.blocks.push( new Block( 200, 0, 600, 50 ) );
+        this.blocks.push( new Block( 100, 0, 700, 50 ) );
         this.addChild(this.blocks[0]);
         this.botCreateLevel=0;
         this.botCreateSpeed=0.5;
