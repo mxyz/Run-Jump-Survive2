@@ -23,7 +23,7 @@ var Block = cc.Sprite.extend({
         var brect = this.getBoundingBox();
         var bminx = cc.rectGetMinX( brect );
         var bmaxx = cc.rectGetMaxX( brect );
-        var minx = cc.rectGetMinX( rect );
+        var minx  = cc.rectGetMinX( rect );
         var maxx = cc.rectGetMaxX( rect );
         return ( minx <= bmaxx ) && ( bminx <= maxx );
     }
